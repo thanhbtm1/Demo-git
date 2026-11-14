@@ -13,10 +13,7 @@ var ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
 // Parse body JSON trả về từ server (RevenueCat)
 var obj = JSON.parse($response.body);
 
-console.log("===== UA =====");
-console.log(ua);
-console.log("===== BODY GỐC =====");
-console.log(JSON.stringify(obj, null, 2));
+
 
 // Thêm dòng chú ý vào response
 obj.Attention = "Chúc mừng bạn! Vui lòng không bán hoặc chia sẻ cho người khác!";
@@ -49,6 +46,10 @@ const match = Object.keys(mapping).find(function (e) {
 });
 
 if (match) {
+  console.log("===== UA =====");
+  console.log(ua);
+  console.log("===== BODY GỐC =====");
+  console.log(JSON.stringify(obj, null, 2));
   // Nếu tìm thấy app trong mapping
   let entitlementId = mapping[match][0];  // ví dụ: "vip+watch_vip" hoặc "Gold"
   let productId     = mapping[match][1];  // ví dụ: undefined hoặc "Gold"
@@ -69,6 +70,7 @@ if (match) {
   // Không khớp app nào -> mặc định cấp quyền "pro"
   obj.subscriber.subscriptions["com.ohoang7.premium.yearly"] = ohoang7;
   obj.subscriber.entitlements.pro = vuong2023;
+  
 }
 
 // Trả response đã sửa về cho app
@@ -78,9 +80,9 @@ if (match) {
 
 obj.Attention = "Chúc mừng bạn!";
 // (giả sử đã chèn premium...)
-
-// ===== DEBUG: in body sau khi sửa =====
 console.log("===== BODY SAU SỬA =====");
 console.log(JSON.stringify(obj, null, 2));
+// ===== DEBUG: in body sau khi sửa =====
+
 
 $done({ body: JSON.stringify(obj) });
